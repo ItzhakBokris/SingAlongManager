@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h5 class="modal-title">Fetch Song</h5>
+</div>
+
+<div class="modal-body">
+    <div class="form-group">
+        <label for="siteContent">Site content</label>
+        <textarea class="form-control"
+                  [class.is-invalid]="isInvalid"
+                  id="siteContent"
+                  name="siteContent"
+                  placeholder="Enter site song content"
+                  rows="10"
+                  [(ngModel)]="siteContent"
+                  (ngModelChange)="onSiteContentChange()"></textarea>
+
+        <div *ngIf="isInvalid" class="invalid-feedback">Please provide a valid site song content.</div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="activeModal.close(null)">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="fetchSong()">Fetch</button>
+</div>

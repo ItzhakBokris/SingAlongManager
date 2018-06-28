@@ -1,1 +1,77 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+    min-width: 640px;
+}
+
+.loader-container {
+    display: flex;
+    justify-content: center;
+}
+
+.loader {
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #555;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+.page-content .table {
+    table-layout: fixed;
+}
+
+.page-content .table tr {
+    cursor: pointer;
+}
+
+.page-content .pagination {
+    margin-bottom: 0;
+}
+
+.page-content .pagination .page-link {
+    cursor: pointer;
+}
+
+button, input[type="file"], ::-webkit-file-upload-button {
+    cursor: pointer;
+}
+
+.thumbnail-container {
+    width: 100px;
+    height: 100px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 5px solid white;
+    border-radius: .25rem;
+    box-shadow: 0 0 0 1px gainsboro;
+}
+
+.thumbnail-container img {
+    height: 100%;
+}
+
+.thumbnail-container input {
+    height: 100%;
+    width: 100px;
+    opacity: 0;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

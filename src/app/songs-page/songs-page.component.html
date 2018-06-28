@@ -1,0 +1,54 @@
+<div *ngIf="!currentSongs" class="loader-container">
+    <div class="loader"></div>
+</div>
+
+<div *ngIf="currentSongs" class="page-content">
+    <nav class="navbar navbar-light bg-light">
+        <ul class="pagination">
+            <li class="page-item" [class.disabled]="loading || currentPage === 0">
+                <a class="page-link" (click)="onChangePage(currentPage - 1)">Previous</a>
+            </li>
+            <li class="page-item" [class.disabled]="loading || !hasMoreSongs">
+                <a class="page-link" (click)="onChangePage(currentPage + 1)">Next</a>
+            </li>
+        </ul>
+
+        <form class="form-inline">
+            <div class="col-auto">
+                <input class="form-control"
+                       type="search"
+                       placeholder="Search"
+                       name="searchText"
+                       [(ngModel)]="searchText"
+                       (input)="onSearchTextChange()">
+            </div>
+
+            <button class="btn btn-success" (click)="addSong()">Add Song</button>
+        </form>
+    </nav>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col" style="width: 10%">#</th>
+                <th scope="col">Song Name</th>
+                <th scope="col">Artist</th>
+                <th scope="col">Creation Date</th>
+                <th scope="col">Last Modified Date</th>
+                <th scope="col" class="text-center" style="width: 10%">Views</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let song of currentSongs; let songIndex = index" (click)="onSongPress(song)">
+                <th scope="row">{{previousSongsCount + songIndex + 1}}</th>
+                <td>{{song.name}}</td>
+                <td>{{song.artist}}</td>
+                <td>{{song.creationDate | date:'medium'}}</td>
+                <td>{{song.lastModifiedDate | date:'medium'}}</td>
+                <td class="text-center">{{song.viewsCount}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p *ngIf="currentSongs.length === 0" class="text-center">No Results Found</p>
+</div>

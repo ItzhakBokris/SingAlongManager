@@ -1,0 +1,32 @@
+.images-container {
+    display: flex;
+
+    .thumbnail-container {
+        margin-right: 10px;
+        cursor: pointer;
+
+        &.selected {
+            box-shadow: 0 0 0 2px #007aff;
+        }
+    }
+
+    .add-image-button {
+        color: gainsboro;
+        font-size: 30px;
+
+        .plus-sign {
+            position: absolute;
+        }
+
+        .loader {
+            margin-right: -100%;
+        }
+
+        &.disabled {
+            cursor: auto;
+            background-color: lightgray;
+            border: none;
+            color: darkgray;
+        }
+    }
+}

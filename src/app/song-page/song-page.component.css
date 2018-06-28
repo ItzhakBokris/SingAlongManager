@@ -1,0 +1,21 @@
+.images-container {
+  display: flex; }
+  .images-container .thumbnail-container {
+    margin-right: 10px;
+    cursor: pointer; }
+    .images-container .thumbnail-container.selected {
+      box-shadow: 0 0 0 2px #007aff; }
+  .images-container .add-image-button {
+    color: gainsboro;
+    font-size: 30px; }
+    .images-container .add-image-button .plus-sign {
+      position: absolute; }
+    .images-container .add-image-button .loader {
+      margin-right: -100%; }
+    .images-container .add-image-button.disabled {
+      cursor: auto;
+      background-color: lightgray;
+      border: none;
+      color: darkgray; }
+
+/*# sourceMappingURL=song-page.component.css.map */

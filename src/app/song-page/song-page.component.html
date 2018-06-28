@@ -1,0 +1,106 @@
+<div *ngIf="isLoading" class="loader-container">
+    <div class="loader"></div>
+</div>
+
+<form *ngIf="!isLoading" #songForm="ngForm">
+    <div class="form-group">
+        <label for="songName">Song name</label>
+        <input class="form-control"
+               id="songName"
+               name="songName"
+               #songName="ngModel"
+               [class.is-valid]="toShowValid(songName)"
+               [class.is-invalid]="toShowInvalid(songName)"
+               placeholder="Enter song name"
+               [dir]="isRtl(song.name) ? 'rtl' : 'ltr'"
+               [(ngModel)]="song.name"
+               required/>
+
+        <div *ngIf="toShowInvalid(songName)" class="invalid-feedback">Please provide a song name.</div>
+    </div>
+
+    <div class="form-group">
+        <label for="artistName">Artist</label>
+        <input class="form-control"
+               id="artistName"
+               name="artistName"
+               #artistName="ngModel"
+               [class.is-valid]="toShowValid(artistName)"
+               [class.is-invalid]="toShowInvalid(artistName)"
+               placeholder="Enter artist name"
+               required
+               [dir]="isRtl(song.artist) ? 'rtl' : 'ltr'"
+               [(ngModel)]="song.artist"
+               (ngModelChange)="onArtistChange()"/>
+
+        <div *ngIf="toShowInvalid(artistName)" class="invalid-feedback">Please provide an artist name.</div>
+    </div>
+
+    <div class="form-group">
+        <label>Select Image</label>
+        <div class="images-container">
+            <ng-container *ngIf="!isArtistInvalid">
+                <span *ngFor="let image of artist.images"
+                      class="thumbnail-container"
+                      [class.selected]="song.image === image"
+                      (click)="selectImage(image)">
+
+                    <img [src]="image" alt="Artist Image"/>
+                </span>
+            </ng-container>
+
+            <span *ngIf="showUploadArtistImageButton"
+                  class="add-image-button thumbnail-container"
+                  [class.disabled]="isArtistInvalid">
+
+                <span *ngIf="!isUploading" class="plus-sign">+</span>
+                <span *ngIf="isUploading" class="loader"></span>
+                <input type="file" [disabled]="isArtistInvalid || isUploading" (change)="addImage($event)">
+            </span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="lyricsText">Lyrics</label>
+        <textarea class="form-control"
+                  id="lyricsText"
+                  name="lyricsText"
+                  #lyricsText="ngModel"
+                  [class.is-valid]="toShowValid(lyricsText)"
+                  [class.is-invalid]="toShowInvalid(lyricsText)"
+                  [dir]="isRtl(lyrics.text) ? 'rtl' : 'ltr'"
+                  [(ngModel)]="lyrics.text"
+                  placeholder="Enter lyrics"
+                  rows="16"
+                  required
+                  minlength="20"></textarea>
+
+        <div *ngIf="toShowInvalid(lyricsText)" class="invalid-feedback">
+            Please provide a song lyrics with at least 20 characters long.
+        </div>
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success" role="alert">{{successMessage}}</div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger" role="alert">{{errorMessage}}</div>
+
+    <div class="form-group form-row">
+        <div *ngIf="!isNewSong" class="col-auto">
+            <button class="btn btn-primary" [disabled]="isUpdating" (click)="save(songForm)">Save</button>
+        </div>
+
+        <div *ngIf="!isNewSong" class="col-auto">
+            <button class="btn btn-danger" [disabled]="isUpdating" (click)="delete()">Delete</button>
+        </div>
+
+        <div *ngIf="isNewSong" class="col-auto">
+            <button class="btn btn-primary" [disabled]="isUpdating" (click)="submit(songForm)">Submit</button>
+        </div>
+
+        <div *ngIf="isNewSong" class="col-auto">
+            <button class="btn btn-primary" [disabled]="isUpdating" (click)="openFetchSongDialog()">
+                Fetch From Site Content
+            </button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,39 @@
+<div *ngIf="!currentGroups" class="loader-container">
+    <div class="loader"></div>
+</div>
+
+<div *ngIf="currentGroups" class="page-content">
+    <nav class="navbar navbar-light bg-light">
+        <ul class="pagination">
+            <li class="page-item" [class.disabled]="loading || currentPage === 0">
+                <a class="page-link" (click)="onChangePage(currentPage - 1)">Previous</a>
+            </li>
+            <li class="page-item" [class.disabled]="loading || !hasMoreGroups">
+                <a class="page-link" (click)="onChangePage(currentPage + 1)">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col" style="width: 10%">#</th>
+                <th scope="col">Group Name</th>
+                <th scope="col">Admin</th>
+                <th scope="col">Pin Code</th>
+                <th scope="col" class="text-center" style="width: 10%">Songs</th>
+                <th scope="col" class="text-center" style="width: 10%">Members</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let group of currentGroups; let groupIndex = index" (click)="onGroupPress(group)">
+                <th scope="row">{{previousGroupsCount + groupIndex + 1}}</th>
+                <td>{{group.name}}</td>
+                <td>{{group.admin}}</td>
+                <td>{{group.pinCode}}</td>
+                <td class="text-center">{{group.items?.length || 0}}</td>
+                <td class="text-center">{{group.members?.length || 0}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

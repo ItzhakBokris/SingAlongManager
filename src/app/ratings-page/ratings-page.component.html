@@ -1,0 +1,41 @@
+<div *ngIf="!currentRatings" class="loader-container">
+    <div class="loader"></div>
+</div>
+
+<div *ngIf="currentRatings" class="page-content">
+    <nav class="navbar navbar-light bg-light">
+        <ul class="pagination">
+            <li class="page-item" [class.disabled]="loading || currentPage === 0">
+                <a class="page-link" (click)="onChangePage(currentPage - 1)">Previous</a>
+            </li>
+            <li class="page-item" [class.disabled]="loading || !hasMoreRatings">
+                <a class="page-link" (click)="onChangePage(currentPage + 1)">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col" style="width: 7%">#</th>
+                <th scope="col" style="width: 10%">Rating</th>
+                <th scope="col">Feedback</th>
+                <th scope="col" style="width: 10%">Nickname</th>
+                <th scope="col" style="width: 10%">Os</th>
+                <th scope="col" style="width: 10%">App Version</th>
+                <th scope="col">Creation Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let rating of currentRatings; let ratingIndex = index" (click)="onRatingPress(rating)">
+                <th scope="row">{{previousRatingsCount + ratingIndex + 1}}</th>
+                <td>{{rating.rating}}</td>
+                <td>{{rating.feedback}}</td>
+                <td>{{rating.nickname}}</td>
+                <td>{{rating.os}}</td>
+                <td>{{rating.version}}</td>
+                <td>{{rating.creationDate | date:'medium'}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

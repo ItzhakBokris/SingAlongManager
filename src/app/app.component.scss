@@ -1,0 +1,21 @@
+.page-container {
+    padding: 20px;
+}
+
+.download-data-button {
+    cursor: pointer;
+}
+
+.main-error {
+    margin-bottom: 0;
+    height: 50px;
+    transition: all ease 300ms;
+    border-radius: 0;
+
+    &.hide {
+        height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        border: none;
+    }
+}
