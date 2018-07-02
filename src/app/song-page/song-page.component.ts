@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
 import {AngularFireDatabase} from 'angularfire2/database';
 import {snapshotToArray, snapshotToObject} from '../utils/firebase-utils';
@@ -35,7 +35,6 @@ export class SongPageComponent implements OnInit, OnDestroy {
     constructor(private database: AngularFireDatabase,
                 private storage: AngularFireStorage,
                 private activateRoute: ActivatedRoute,
-                private router: Router,
                 private modalService: NgbModal,
                 private location: Location,
                 private changeDetector: ChangeDetectorRef) {

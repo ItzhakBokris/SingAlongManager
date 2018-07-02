@@ -4,7 +4,6 @@ import {Song} from '../model';
 import {snapshotToArray} from '../utils/firebase-utils';
 import {environment} from '../../environments/environment';
 import {DataSnapshot} from 'angularfire2/database/interfaces';
-import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-songs-page',
@@ -22,7 +21,7 @@ export class SongsPageComponent implements OnInit {
     private nextStartAtSong: string;
     private previousEndAtSong: string;
 
-    constructor(private database: AngularFireDatabase, private router: Router) {
+    constructor(private database: AngularFireDatabase) {
     }
 
     public get previousSongsCount(): number {
@@ -48,14 +47,6 @@ export class SongsPageComponent implements OnInit {
         }
         this.currentPage = pageIndex;
         this.loadSongs();
-    }
-
-    public onSongPress(song: Song): void {
-        this.router.navigate(['song-page', song.key]).then();
-    }
-
-    public addSong(): void {
-        this.router.navigate(['song-page']).then();
     }
 
     private loadSongs(): void {

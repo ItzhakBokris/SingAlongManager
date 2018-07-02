@@ -1,0 +1,11 @@
+.index-column {
+    position: relative;
+
+    a {
+        width: calc(100vw - 40px);
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+    }
+}
