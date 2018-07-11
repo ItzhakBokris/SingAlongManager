@@ -75,62 +75,70 @@ export class FetchSongDialogComponent {
                 if (!chordsPart) {
                     const textPart = tableLines[lineIndex].getElementsByClassName('song')[0];
                     if (textPart) {
-                        if (tableLines.length > lineIndex + 1) {
-                            const nextLineChordsPart = tableLines[lineIndex + 1].getElementsByClassName(chordsClass)[0];
-                            if (nextLineChordsPart) {
-                                continue; // TODO: add intro section
-                            }
-                        }
-                        song.lyrics += textPart.textContent + '\n';
+                        song.lyrics += '\n' + textPart.textContent.replace(/[\n\r]+/g, '').trim() + '\n';
                     }
                     lineIndex--;
                     continue;
                 }
+                let text = '';
+                let lineIndexDecreased = false;
                 if (tableLines.length <= lineIndex + 1) {
-                    continue;
+                    lineIndexDecreased = true;
+                    lineIndex--;
+                } else {
+                    const nextLineTextPart = tableLines[lineIndex + 1].getElementsByClassName('song')[0];
+                    if (nextLineTextPart) {
+                        text += nextLineTextPart.textContent.replace(/[\n\r]+/g, '').trim();
+                    } else {
+                        lineIndexDecreased = true;
+                        lineIndex--;
+                    }
                 }
-                const nextLineTextPart = tableLines[lineIndex + 1].getElementsByClassName('song')[0];
-                if (chordsPart && nextLineTextPart) {
-                    const chordElementList = chordsPart.getElementsByTagName('span');
-                    let chords = [];
-                    for (let elementIndex = 0; elementIndex < chordElementList.length; elementIndex++) {
-                        chords.push(chordElementList[elementIndex]);
+                const chordElementList = chordsPart.getElementsByTagName('span');
+                let chords = [];
+                for (let elementIndex = 0; elementIndex < chordElementList.length; elementIndex++) {
+                    chords.push(chordElementList[elementIndex]);
+                }
+                let spaces: RegExpExecArray | null;
+                let chordIndex = 0;
+                let chordTextPosition = 0;
+
+                let chordsText = chordsPart.innerText.replace(/[\n\r]+/g, '')
+                    .replace(/(([א-ת]+[  ])+[א-ת]+)/g, '');
+
+                if (isHebrew) {
+                    chordsText = chordsText.split('').reverse().join('');
+                    const reversedChords = [];
+                    for (let i = chords.length - 1; i >= 0; i--) {
+                        reversedChords.push(chords[i]);
                     }
-                    let text = nextLineTextPart.textContent.replace(/[\n\r]+/g, '').trim();
-                    let spaces: RegExpExecArray | null;
-                    let chordIndex = 0;
-                    let chordTextPosition = 0;
-                    let chordsText = chordsPart.innerText.replace(/[\n\r]+/g, '').replace(/(([א-ת]+[  ])+[א-ת]+)/g, '');
-                    if (isHebrew) {
-                        chordsText = chordsText.split('').reverse().join('');
-                        const reversedChords = [];
-                        for (let i = chords.length - 1; i >= 0; i--) {
-                            reversedChords.push(chords[i]);
-                        }
-                        chords = reversedChords;
-                    }
-                    const spacesRegex = /[  ]+/g;
-                    while (chords.length > chordIndex && (spaces = spacesRegex.exec(chordsText))) {
-                        let chord = chords[chordIndex].textContent.replace(/[\s\n\r]+/g, '').trim();
-                        if (chordIndex === 0 && spaces && spaces.index > 0) {
-                            // The first chord is in the beginning of the line.
-                            text = '[' + chord + ']' + text;
-                            chordTextPosition += (2 + 2 * chord.length);
-                            chordIndex++;
-                            if (chords.length <= chordIndex) {
-                                break;
-                            }
-                            chord = chords[chordIndex].textContent.replace(/[\s\n\r]+/g, '').trim();
-                        }
-                        chordTextPosition += spaces[0].length;
-                        text = text.slice(0, chordTextPosition) + '[' + chord + ']' + text.slice(chordTextPosition);
+                    chords = reversedChords;
+                }
+                const spacesRegex = /[  ]+/g;
+                while (chords.length > chordIndex && (spaces = spacesRegex.exec(chordsText))) {
+                    let chord = chords[chordIndex].textContent.replace(/[\s\n\r]+/g, '').trim();
+                    if (chordIndex === 0 && spaces && spaces.index > 0) {
+                        // The first chord is in the beginning of the line.
+                        text = '[' + chord + ']' + text;
                         chordTextPosition += (2 + 2 * chord.length);
                         chordIndex++;
+                        if (chords.length <= chordIndex) {
+                            break;
+                        }
+                        chord = chords[chordIndex].textContent.replace(/[\s\n\r]+/g, '').trim();
                     }
-                    song.lyrics += text + '\n';
+                    chordTextPosition += spaces[0].length;
+                    text = text.slice(0, chordTextPosition) + '[' + chord + ']' + text.slice(chordTextPosition);
+                    chordTextPosition += (2 + 2 * chord.length);
+                    chordIndex++;
                 }
+                if (tableLines.length > 1 && lineIndex === 0 && !lineIndexDecreased) {
+                    text = '\n' + text;
+                }
+                song.lyrics += text + '\n';
             }
         }
+        song.lyrics = song.lyrics.trim();
         return song;
     }
 }
