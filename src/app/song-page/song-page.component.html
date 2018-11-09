@@ -68,7 +68,7 @@
                   #lyricsText="ngModel"
                   [class.is-valid]="toShowValid(lyricsText)"
                   [class.is-invalid]="toShowInvalid(lyricsText)"
-                  [dir]="isRtl(lyrics.text) ? 'rtl' : 'ltr'"
+                  [dir]="isLyricsRtl(lyrics.text) ? 'rtl' : 'ltr'"
                   [(ngModel)]="lyrics.text"
                   placeholder="Enter lyrics"
                   rows="16"

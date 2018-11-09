@@ -32,7 +32,6 @@ const appRoutes: Routes = [
         SongPageComponent,
         FetchSongDialogComponent,
         ConfirmationDialogComponent,
-        ConfirmationDialogComponent,
         RatingsPageComponent
     ],
     imports: [

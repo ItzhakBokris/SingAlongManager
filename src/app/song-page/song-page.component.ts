@@ -12,6 +12,7 @@ import {AngularFireStorage, AngularFireUploadTask} from 'angularfire2/storage';
 
 const GENERIC_ERROR_MESSAGE = 'Something went wrong, please try again later';
 const ARTIST_IMAGE_MAP_KEY = 'artist_image_map_key';
+const HEBREW_CHARS_REQUIRED_PROPORTION_FOR_RTL = 0.25;
 
 @Component({
     selector: 'app-song-page',
@@ -69,6 +70,12 @@ export class SongPageComponent implements OnInit, OnDestroy {
 
     public isRtl(text: string): boolean {
         return /[א-ת]/.test(text);
+    }
+
+    public isLyricsRtl(text: string): boolean {
+        text = text.replace(/(\[[^\]]*\])+/g, '').replace(/[^a-zא-ת]/ig, '');
+        const result = text.match(/[א-ת]/g) || '';
+        return result.length / text.length > HEBREW_CHARS_REQUIRED_PROPORTION_FOR_RTL;
     }
 
     public toShowValid(control: FormControl): boolean {

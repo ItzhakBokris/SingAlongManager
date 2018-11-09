@@ -59,8 +59,7 @@ export class FetchSongDialogComponent {
         if (!lyricsContent) {
             return;
         }
-        const isHebrew = lyricsContent.align === 'right';
-        const chordsClass = isHebrew ? 'chords' : 'chords_en';
+        const chordsClass = lyricsContent.align === 'right' ? 'chords' : 'chords_en';
         const songTables = lyricsContent.getElementsByTagName('tbody');
         if (!songTables) {
             return;
@@ -94,10 +93,18 @@ export class FetchSongDialogComponent {
                         lineIndex--;
                     }
                 }
-                const chordElementList = chordsPart.getElementsByTagName('span');
+                const divs = chordsPart.getElementsByTagName('div');
+                for (let divIndex = divs.length; divIndex--;) {
+                    chordsPart.removeChild(divs[divIndex]);
+                }
                 let chords = [];
-                for (let elementIndex = 0; elementIndex < chordElementList.length; elementIndex++) {
-                    chords.push(chordElementList[elementIndex]);
+                const chordElementList = chordsPart.getElementsByTagName('span');
+                if (chordElementList.length > 0) {
+                    for (let elementIndex = 0; elementIndex < chordElementList.length; elementIndex++) {
+                        chords.push(chordElementList[elementIndex].textContent.replace(/[\s\n\r]+/g, '').trim());
+                    }
+                } else if (chordsPart.children.length === 0) {
+                    chords = chordsPart.innerText.trim().split(/[  ]+/);
                 }
                 let spaces: RegExpExecArray | null;
                 let chordIndex = 0;
@@ -106,7 +113,7 @@ export class FetchSongDialogComponent {
                 let chordsText = chordsPart.innerText.replace(/[\n\r]+/g, '')
                     .replace(/(([א-ת]+[  ])+[א-ת]+)/g, '');
 
-                if (isHebrew) {
+                if (/[א-ת]/.test(text)) {
                     chordsText = chordsText.split('').reverse().join('');
                     const reversedChords = [];
                     for (let i = chords.length - 1; i >= 0; i--) {
@@ -116,7 +123,7 @@ export class FetchSongDialogComponent {
                 }
                 const spacesRegex = /[  ]+/g;
                 while (chords.length > chordIndex && (spaces = spacesRegex.exec(chordsText))) {
-                    let chord = chords[chordIndex].textContent.replace(/[\s\n\r]+/g, '').trim();
+                    let chord = chords[chordIndex];
                     if (chordIndex === 0 && spaces && spaces.index > 0) {
                         // The first chord is in the beginning of the line.
                         text = '[' + chord + ']' + text;
@@ -125,11 +132,12 @@ export class FetchSongDialogComponent {
                         if (chords.length <= chordIndex) {
                             break;
                         }
-                        chord = chords[chordIndex].textContent.replace(/[\s\n\r]+/g, '').trim();
+                        chord = chords[chordIndex];
                     }
                     chordTextPosition += spaces[0].length;
-                    text = text.slice(0, chordTextPosition) + '[' + chord + ']' + text.slice(chordTextPosition);
-                    chordTextPosition += (2 + 2 * chord.length);
+                    const spaceChord = chordTextPosition >= text.length || /[^a-zא-ת]/i.test(text[chordTextPosition]);
+                    text = text.slice(0, chordTextPosition) + (spaceChord ? ' ' : '') + '[' + chord + ']' + text.slice(chordTextPosition);
+                    chordTextPosition += (2 + 2 * chord.length) + (spaceChord ? 1 : 0);
                     chordIndex++;
                 }
                 if (tableLines.length > 1 && lineIndex === 0 && !lineIndexDecreased) {
