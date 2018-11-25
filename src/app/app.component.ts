@@ -19,16 +19,15 @@ export class AppComponent {
     }
 
     public downloadData(): void {
-        this.database.list('songs').query.once('value', snapshot => {
-            snapshotToArray(snapshot).forEach(song => {
-                this.database.object(`/songs/${song.key}`).update({
-                    viewsCountName: `${('0'.repeat(environment.viewsCountMaxLength) +
-                        song.viewsCount).slice(-environment.viewsCountMaxLength)}_${song.name}`,
-                });
-            });
-        }).then();
-        this.isCsvGenerated = true;
-
+        // this.database.list('songs').query.once('value', snapshot => {
+        //     snapshotToArray(snapshot).forEach(song => {
+        //         this.database.object(`/songs/${song.key}`).update({
+        //             viewsCountName: `${('0'.repeat(environment.viewsCountMaxLength) +
+        //                 song.viewsCount).slice(-environment.viewsCountMaxLength)}_${song.name}`,
+        //         });
+        //     });
+        // }).then();
+        // this.isCsvGenerated = true;
         if (!this.isCsvGenerated) {
             this.isCsvGenerated = true;
             Promise.all(
