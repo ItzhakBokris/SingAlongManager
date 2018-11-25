@@ -3,6 +3,7 @@ import {AngularFireDatabase} from 'angularfire2/database';
 import {snapshotToArray} from './utils/firebase-utils';
 import {Group, GroupSong, Rating, Song} from './model';
 import {downloadFile, escapeCsvData} from './utils/files-utils';
+import {environment} from '../environments/environment';
 
 @Component({
     selector: 'app-root',
@@ -18,14 +19,15 @@ export class AppComponent {
     }
 
     public downloadData(): void {
-        // this.database.list('songs').query.once('value', snapshot => {
-        //     snapshotToArray(snapshot).forEach(song => {
-        //         this.database.object(`/songs/${song.key}`).update({
-        //             viewsCountName: song.viewsCount + '_' + song.name
-        //         });
-        //     });
-        // }).then();
-        // this.isCsvGenerated = true;
+        this.database.list('songs').query.once('value', snapshot => {
+            snapshotToArray(snapshot).forEach(song => {
+                this.database.object(`/songs/${song.key}`).update({
+                    viewsCountName: `${('0'.repeat(environment.viewsCountMaxLength) +
+                        song.viewsCount).slice(-environment.viewsCountMaxLength)}_${song.name}`,
+                });
+            });
+        }).then();
+        this.isCsvGenerated = true;
 
         if (!this.isCsvGenerated) {
             this.isCsvGenerated = true;

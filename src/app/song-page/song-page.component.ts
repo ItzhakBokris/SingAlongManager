@@ -9,6 +9,7 @@ import {ConfirmationDialogComponent} from '../components/confirmation-dialog/con
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FetchSongDialogComponent, SongProperties} from './fetch-song-dialog/fetch-song-dialog.component';
 import {AngularFireStorage, AngularFireUploadTask} from 'angularfire2/storage';
+import {environment} from '../../environments/environment';
 
 const GENERIC_ERROR_MESSAGE = 'Something went wrong, please try again later';
 const ARTIST_IMAGE_MAP_KEY = 'artist_image_map_key';
@@ -226,7 +227,7 @@ export class SongPageComponent implements OnInit, OnDestroy {
                     lyrics: lyricsResult.key,
                     viewsCount: 0,
                     likesCount: 0,
-                    viewsCountName: '0_' + this.song.name,
+                    viewsCountName: `${'0'.repeat(environment.viewsCountMaxLength)}_${this.song.name}`,
                     creationDate: new Date().toISOString(),
                     lastModifiedDate: new Date().toISOString()
                 };
@@ -247,7 +248,8 @@ export class SongPageComponent implements OnInit, OnDestroy {
             this.database.object(`/songs/${this.songKey}`).update({
                 ...this.song,
                 key: null,
-                viewsCountName: `${this.song.viewsCount}_${this.song.name}`,
+                viewsCountName: `${('0'.repeat(environment.viewsCountMaxLength) +
+                    this.song.viewsCount).slice(-environment.viewsCountMaxLength)}_${this.song.name}`,
                 lastModifiedDate: new Date().toISOString()
             }),
             this.database.object(`/lyricses/${this.song.lyrics}`).update({...this.lyrics, key: null})

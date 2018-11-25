@@ -12,7 +12,8 @@ export const environment = {
         storageBucket: 'gs://singalong-6aaf5.appspot.com',
         messagingSenderId: '1090194417681'
     },
-    pageSize: 50
+    pageSize: 50,
+    viewsCountMaxLength: 12
 };
 
 /*
