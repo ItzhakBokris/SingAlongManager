@@ -23,7 +23,7 @@ export class AppComponent {
         //     snapshotToArray(snapshot).forEach(song => {
         //         this.database.object(`/songs/${song.key}`).update({
         //             viewsCountName: `${('0'.repeat(environment.viewsCountMaxLength) +
-        //                 song.viewsCount).slice(-environment.viewsCountMaxLength)}_${song.name}`,
+        //                 song.viewsCount).slice(-environment.viewsCountMaxLength)}_${song.lastModifiedDate}`,
         //         });
         //     });
         // }).then();
