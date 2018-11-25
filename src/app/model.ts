@@ -4,6 +4,7 @@ export interface Song {
     artist: string;
     viewsCount?: number;
     likesCount?: number;
+    viewsCountName?: string;
     lyrics?: string;
     image?: string;
     creationDate?: string;

@@ -226,6 +226,7 @@ export class SongPageComponent implements OnInit, OnDestroy {
                     lyrics: lyricsResult.key,
                     viewsCount: 0,
                     likesCount: 0,
+                    viewsCountName: '0_' + this.song.name,
                     creationDate: new Date().toISOString(),
                     lastModifiedDate: new Date().toISOString()
                 };
@@ -246,6 +247,7 @@ export class SongPageComponent implements OnInit, OnDestroy {
             this.database.object(`/songs/${this.songKey}`).update({
                 ...this.song,
                 key: null,
+                viewsCountName: `${this.song.viewsCount}_${this.song.name}`,
                 lastModifiedDate: new Date().toISOString()
             }),
             this.database.object(`/lyricses/${this.song.lyrics}`).update({...this.lyrics, key: null})

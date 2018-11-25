@@ -18,6 +18,15 @@ export class AppComponent {
     }
 
     public downloadData(): void {
+        // this.database.list('songs').query.once('value', snapshot => {
+        //     snapshotToArray(snapshot).forEach(song => {
+        //         this.database.object(`/songs/${song.key}`).update({
+        //             viewsCountName: song.viewsCount + '_' + song.name
+        //         });
+        //     });
+        // }).then();
+        // this.isCsvGenerated = true;
+
         if (!this.isCsvGenerated) {
             this.isCsvGenerated = true;
             Promise.all(
