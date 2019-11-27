@@ -21,12 +21,18 @@ export class AppComponent {
     public downloadData(): void {
         // this.database.list('songs').query.once('value', snapshot => {
         //     snapshotToArray(snapshot).forEach(song => {
+        //         const viewsCountName = `${('0'.repeat(environment.viewsCountMaxLength) +
+        //             (parseInt('9'.repeat(environment.viewsCountMaxLength), 10) - song.viewsCount))
+        //             .slice(-environment.viewsCountMaxLength)}_${song.lastModifiedDate}`;
         //         this.database.object(`/songs/${song.key}`).update({
-        //             viewsCountName: `${('0'.repeat(environment.viewsCountMaxLength) +
-        //                 song.viewsCount).slice(-environment.viewsCountMaxLength)}_${song.lastModifiedDate}`,
+        //             viewsCountName,
+        //             searchName: `${song.name.toLowerCase()}_${viewsCountName}`
         //         });
         //     });
         // }).then();
+
+
+
         // this.isCsvGenerated = true;
         if (!this.isCsvGenerated) {
             this.isCsvGenerated = true;

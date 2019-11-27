@@ -223,13 +223,15 @@ export class SongPageComponent implements OnInit, OnDestroy {
         this.handlePromise(this.database.list('lyricses').push(this.lyrics),
             lyricsResult => {
                 const creationDate = new Date().toISOString();
+                const viewsCountName = `${'9'.repeat(environment.viewsCountMaxLength)}_${creationDate}`;
                 this.song = {
                     ...this.song,
                     lyrics: lyricsResult.key,
                     viewsCount: 0,
                     likesCount: 0,
-                    viewsCountName: `${'0'.repeat(environment.viewsCountMaxLength)}_${creationDate}`,
-                    creationDate: creationDate,
+                    searchName: `${this.song.name.toLowerCase()}_${viewsCountName}`,
+                    viewsCountName,
+                    creationDate,
                     lastModifiedDate: creationDate
                 };
                 this.handlePromise(this.database.list('songs').push(this.song),
@@ -246,12 +248,15 @@ export class SongPageComponent implements OnInit, OnDestroy {
 
     private updateSong(): void {
         const modifiedDate = new Date().toISOString();
+        const viewsCountName = `${('0'.repeat(environment.viewsCountMaxLength) +
+            (parseInt('9'.repeat(environment.viewsCountMaxLength), 10) - this.song.viewsCount))
+            .slice(-environment.viewsCountMaxLength)}_${this.song.lastModifiedDate}`;
         this.handlePromises([
             this.database.object(`/songs/${this.songKey}`).update({
                 ...this.song,
                 key: null,
-                viewsCountName: `${('0'.repeat(environment.viewsCountMaxLength) +
-                    this.song.viewsCount).slice(-environment.viewsCountMaxLength)}_${modifiedDate}`,
+                viewsCountName,
+                searchName: `${this.song.name.toLowerCase()}_${viewsCountName}`,
                 lastModifiedDate: modifiedDate
             }),
             this.database.object(`/lyricses/${this.song.lyrics}`).update({...this.lyrics, key: null})
