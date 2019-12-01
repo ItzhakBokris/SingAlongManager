@@ -51,14 +51,14 @@ export class SongsPageComponent implements OnInit {
 
     private loadSongs(): void {
         this.loading = true;
-        let query = this.database.list('/songs').query.orderByChild('name');
+        let query = this.database.list('/songs').query.orderByChild('searchName');
         if (this.nextStartAtSong) {
-            query = query.startAt(this.nextStartAtSong).limitToFirst(environment.pageSize + 1);
+            query = query.startAt(this.nextStartAtSong.toLowerCase()).limitToFirst(environment.pageSize + 1);
             if (this.searchText) {
-                query = query.endAt(this.searchText + '\uf8ff');
+                query = query.endAt(this.searchText.toLowerCase() + '\uf8ff');
             }
         } else if (this.previousEndAtSong) {
-            query = query.endAt(this.previousEndAtSong).limitToLast(environment.pageSize + 1);
+            query = query.endAt(this.previousEndAtSong.toLowerCase()).limitToLast(environment.pageSize + 1);
         } else {
             query = query.limitToFirst(environment.pageSize + 1);
         }
